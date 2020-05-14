@@ -1,0 +1,114 @@
+public class TestLIFO {
+
+	public static void test() {
+
+		System.out.println("\n*************    TestLIFO.test     ***************");
+
+		testConstructor();
+		testAddPeek();
+		testPush();
+		testRemove();
+		testPop();
+		testAddUpToLimit();
+		testAddOverLimit();
+
+		System.out.println();
+	} // end test()
+
+	public static void testConstructor() {
+		System.out.println("\n --- testConstructor() ---");
+		LIFO queue = new LIFO(5);
+		if (!queue.isEmpty()) {
+			System.out.println("Not Empty at Instantiation.");
+		}
+		if (0 != queue.numberOfItems()) {
+			System.out.println("Constructor. NOI "+queue.numberOfItems()+". Expected 0");
+		}
+	} // end testConstructor
+
+	public static void testAddPeek() {
+		System.out.println("\n--- testAddPeek() ---");
+		LIFO queue = new LIFO(5);
+		queue.add(0);
+		queue.add(1);
+		if (2 != queue.numberOfItems()) {
+			System.out.println("Add. NOI "+queue.numberOfItems()+". Expected 2");
+		}
+		// LIFO. Next element to remove is at the tail of the list (1).
+		if (queue.peek() == null || queue.peek() != 1) {
+			System.out.println("Peek is "+queue.peek()+". Expected 1.");
+		}
+	} // end testAddPeek
+
+	public static void testPush() {
+		System.out.println("\n--- testPush() ---");
+		LIFO queue = new LIFO(5);
+		queue.push(0);
+		queue.push(1);
+		if (2 != queue.numberOfItems()) {
+			System.out.println("Add. NOI "+queue.numberOfItems()+". Expected 2");
+		}
+		// LIFO. Next element to remove is at the tail of the list (1).
+		if (queue.peek() == null || queue.peek() != 1) {
+			System.out.println("Peek is "+queue.peek()+". Expected 1.");
+		}
+	} // end testPush
+
+	public static void testRemove() {
+		System.out.println("\n --- testRemove() --- ");
+		LIFO queue = new LIFO(5);
+		for (int i=0; i<5; i++) {
+			queue.add(i);
+		}
+		Integer result = -1;
+		for (int i=4; i>0; i--) {
+			result = queue.remove();
+			if (result == null || result != i) {
+				System.out.println("Removed "+result+". Expected "+i);
+			}
+		}
+		if (queue.numberOfItems() != 1) {
+			System.out.println("Remove all but 1. NOI "+queue.numberOfItems()+". Expected 1");
+		}
+	} // end testRemove
+
+	public static void testPop() {
+		System.out.println("\n--- testPop() ---");
+		LIFO queue = new LIFO(5);
+		queue.push(0);
+		queue.push(1);
+		Integer result = queue.pop();
+		if (1 != queue.numberOfItems()) {
+			System.out.println("Pop. NOI "+queue.numberOfItems()+". Expected 1");
+		}
+		// LIFO. Next element to remove is at the tail of the list (1).
+		if (result == null || result != 1) {
+			System.out.println("Pop is "+result+". Expected 1.");
+		}
+	} // end testPop
+	public static void testAddUpToLimit() {
+		System.out.println("\n--- testAddUpToLimit() ---");
+		LIFO queue = new LIFO(5);
+		for (int i=0; i<5; i++) {
+			queue.add(i);
+		}
+		if (!queue.isFull()) {
+			System.out.println("Added to capacity, but not full.");
+		}
+		if (5 != queue.numberOfItems()) {
+			System.out.println("Add To Limit. NOI "+queue.numberOfItems()+". Expected 5");
+		}
+	} // end testAddUpToLimit
+
+
+	public static void testAddOverLimit() {
+		System.out.println("\n--- testAddOverLimit() ---");
+		LIFO queue = new LIFO(5);
+		for (int i=0; i<6; i++) {
+			queue.add(i);
+		}
+		if (queue.numberOfItems() != 5) {
+			System.out.println("Added over capacity. NOI "+queue.numberOfItems()+". Expected 5");
+		}
+	} // end testAddOverLimit
+} // end class TestLIFO
