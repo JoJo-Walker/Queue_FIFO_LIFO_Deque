@@ -1,0 +1,214 @@
+/** Abstract class Queue for FIFO, LIFO, and Deque.
+adding, removing, peeking at specific locations are defined here.
+the unspecific add(), remove(), peek() are abstract and must be defined in the derived class.
+*/
+public abstract class Queue {
+
+	/** Max array size if unspecified by user */
+	static final int DEFAULT_CAPACITY = 100;
+
+	/** Primary basic data structure to hold queue elements */
+	protected Integer[] nums = null;
+
+	/** Max number of elements that can be stored (i.e. size of the nums array) */
+	private int capacity;
+
+	/** Number of elements currently stored in the queue */
+	private int numberOfItems = 0;
+
+	/** An index to the first element in the queue */
+	private int head;
+
+	/** An index to the last element in the queue.
+	Increment tail before adding a new element to the end. */
+	private int tail;
+
+	/** Constructor with user-defined capacity.
+	@param size capacity of the Queue
+	*/
+	public Queue(int size) {
+		capacity = size;
+		head = 0;
+		tail = capacity-1;
+		nums = new Integer[capacity];
+	}
+
+	/** Constructor using default capacity.
+	*/
+	public Queue() {
+		this(DEFAULT_CAPACITY);
+	}
+
+	// Getters
+	/** Member variable for capacity.
+         * Member variable for capacity.
+         * @return Int - an integer for size of array
+         */
+	public int capacity() { return capacity; };
+        
+	/** Member variable for numberOfItems.
+         * Returns the size of the array.
+         * @return Int - an integer for elements in the array
+         */
+	public int numberOfItems() { return numberOfItems; }
+	
+        /** Member variable for Head.
+         * Returns element at the head.
+         * @return Int - an integer of the element at the head.
+         */
+	public int head() { return head; }
+	
+        /** Member variable for Tail.
+         * Returns element at the tail.
+         * @return Int - an integer of the element at the tail.
+         */
+	public int tail() { return tail; }
+
+	/** Is the queue at capacity?
+	@return boolean true or false if at capacity.
+	*/
+	public boolean isFull() { return numberOfItems==capacity; }
+
+	/** Is the queue empty?
+	@return boolean true or false if nothing in queue.
+	*/
+	public boolean isEmpty() { return numberOfItems==0; }
+
+	/** Increment head to next index (using a circular array).*/
+	protected final void incrementHead() {
+		head = (head+1) % capacity;
+	}
+
+	/** Decrement head to previous index (using a circular array).*/
+	protected final void decrementHead() {
+                if (head == 0) {
+                    head = capacity - 1;
+                    return;
+                }
+		head = (head - 1) % capacity;
+	}
+
+	/** Increment tail to next index (using a circular array).*/
+	protected final void incrementTail() {
+		tail = (tail + 1) % capacity;
+	}
+
+	/** Decrement tail to previous index (using a circular array).*/
+	protected final void decrementTail() {
+                if (tail == 0) {
+                    tail = capacity - 1;
+                    return;
+                }
+		tail = (tail - 1) % capacity;
+	}
+
+	@Override
+	public String toString() {
+		if (isEmpty()) { return "[ ]"; }
+		String returnString = "[ ";
+		for (int i=0; i<numberOfItems(); i++) {;
+			returnString = returnString + nums[i] + " ";
+		}
+		returnString = returnString + "]";
+		return returnString;
+	}
+
+	/** Peek at the element that will be removed next.
+	@return element to be removed next.
+	*/
+	public abstract Integer peek();        
+
+	/** Peek at the element at the head of the queue.
+	@return the element at the head.
+	*/
+	public Integer peekFirst() {
+		if (isEmpty()) { return null; }
+		return nums[head];
+	}
+
+	/** Peek at the element at the tail of the queue.
+	@return the element at the tail.
+	*/
+	public Integer peekLast() {
+		if (isEmpty()) { return null; }
+		return nums[tail];
+	}
+
+	/** Add element at location appropriate for queue type, UNLESS it is full.
+	@param n the element to add to the queue
+	*/
+	public abstract void add(Integer n);
+
+	/** Add an element to the head of the queue, unless it is full.
+	@param n the element to add to the queue.
+	*/
+	public void addFirst(Integer n) {
+            if (isFull()) {
+                return;
+            }
+            decrementHead();
+            nums[head] = n;
+            numberOfItems++;
+	}
+
+	/** Add an element to the tail of the queue, unless it is full.
+	@param n the element to add to the queue.
+	*/
+	public void addLast(Integer n) {
+		if (isFull()) {
+			return;
+		}
+		incrementTail();
+		nums[tail] = n;
+		numberOfItems++;
+	}
+
+	/** Remove element from queue at location appropriate for queue type.
+	@return element removed or null if queue is empty.
+	*/
+	public abstract Integer remove();
+
+	/** Remove an element from the head of the queue.
+	@return element removed or null if queue is empty.
+	*/
+	public Integer removeFirst() {
+		if (isEmpty()) {
+			return null;
+		}
+		Integer temp = nums[head];
+		nums[head] = null;
+		incrementHead();
+		numberOfItems--;
+		return temp;
+	}
+
+	/** Remove an element from the tail of the queue.
+	@return element removed or null if queue is empty.
+	*/
+	public Integer removeLast() {
+		if (isEmpty()) {
+                    return null;
+                }
+                Integer temp = nums[tail];
+                nums[tail] = null;
+                decrementTail();
+                numberOfItems--;
+                return temp;
+	}
+
+	/** Remove all elements from the queue.
+	*/
+	public void removeAll() {
+            if (isEmpty()) {
+                return;
+            }
+            while (numberOfItems != 0) {
+                nums[head] = null;
+                numberOfItems--;
+                incrementHead();
+            }
+            head = 0;
+            tail = capacity - 1;
+	}
+
+} // end abstract class Queue
