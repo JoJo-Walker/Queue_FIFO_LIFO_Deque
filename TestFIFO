@@ -1,0 +1,85 @@
+public class TestFIFO {
+
+	public static void test() {
+
+		System.out.println("\n*************    TestFIFO.test     ***************");
+		testConstructor();
+		testAddPeek();
+		testRemove();
+
+		testAddUpToLimit();
+		testAddOverLimit();
+		System.out.println();
+	} // end test()
+
+	public static void testConstructor() {
+		System.out.println("\n --- testConstructor() ---");
+		FIFO queue = new FIFO(5);
+		if (!queue.isEmpty()) {
+			System.out.println("Not Empty at Instantiation.");
+		}
+		if (0 != queue.numberOfItems()) {
+			System.out.println("Constructor. NOI "+queue.numberOfItems()+". Expected 0");
+		}
+	} // end testConstructor
+
+	public static void testAddPeek() {
+		System.out.println("\n--- testAddPeek() ---");
+		FIFO queue = new FIFO(5);
+		queue.add(0);
+		queue.add(1);
+		if (2 != queue.numberOfItems()) {
+			System.out.println("Add. NOI "+queue.numberOfItems()+". Expected 2");
+		}
+		// FIFO. Next element to remove is at the head of the list (0).
+		if (queue.peek() == null || queue.peek() != 0) {
+			System.out.println("Peek is "+queue.peek()+". Expected 0.");
+		}
+	} // end testAddPeek
+
+	public static void testRemove() {
+		System.out.println("\n --- testRemove() --- ");
+		FIFO queue = new FIFO(5);
+		for (int i=0; i<5; i++) {
+			queue.add(i);
+		}
+		Integer result = -1;
+		for (int i=0; i<4; i++) {
+			result = queue.remove();
+			if (result == null || result != i) {
+				System.out.println("Removed "+result+". Expected "+i);
+			}
+		}
+		if (queue.numberOfItems() != 1) {
+			System.out.println("Remove all but 1. NOI "+queue.numberOfItems()+". Expected 1");
+		}
+	} // end testRemove
+
+
+	public static void testAddUpToLimit() {
+		System.out.println("\n--- testAddUpToLimit() ---");
+		FIFO queue = new FIFO(5);
+		for (int i=0; i<5; i++) {
+			queue.add(i);
+		}
+		if (!queue.isFull()) {
+			System.out.println("Added to capacity, but not full.");
+		}
+		if (5 != queue.numberOfItems()) {
+			System.out.println("Add To Limit. NOI "+queue.numberOfItems()+". Expected 5");
+		}
+	} // end testAddUpToLimit
+
+
+	public static void testAddOverLimit() {
+		System.out.println("\n--- testAddOverLimit() ---");
+		FIFO queue = new FIFO(5);
+		for (int i=0; i<6; i++) {
+			queue.add(i);
+		}
+		if (queue.numberOfItems() != 5) {
+			System.out.println("Added over capacity. NOI "+queue.numberOfItems()+". Expected 5");
+		}
+	} // end testAddOverLimit
+
+} // end class TestFIFO
