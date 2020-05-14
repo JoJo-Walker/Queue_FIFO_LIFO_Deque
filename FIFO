@@ -1,0 +1,54 @@
+/** Abstract Data Type First-In-First-Out FIFO Queue derived from class Queue.
+add(), remove() and peek() are defined here and correspond to FIFO behavior.
+The user can use addFirst and removeLast, but this will break the presumed behavior of an FIFO.
+*/
+public class FIFO extends Queue {
+
+	public FIFO() {
+		super();
+	}
+
+	public FIFO(int size) {
+		super(size);
+	}
+
+	/** Print in order from head to tail.
+	@return all numbers on one line.
+	*/
+	@Override
+	public String toString() {
+		if (isEmpty()) { return ""; }
+		String returnString = "[ ";
+		for (int i=0; i<numberOfItems(); i++) {
+			Integer n = nums[(head()+i)%(capacity())];
+			returnString = returnString + n + " ";
+		}
+		returnString = returnString + "]";
+		return returnString;
+	}
+
+	/** Peek at the element at the front (to be removed next)
+	@return the element at the head.
+	*/
+	@Override
+	public Integer peek(){
+		return peekFirst();
+	}
+
+	/** Add element to tail of queue, UNLESS it is full.
+	@param n the element to add to the queue
+	*/
+	@Override
+	public void add(Integer n) {
+		addLast(n);
+	}
+
+	/** Remove element from head of queue.
+	@return element removed or null if queue is empty.
+	*/
+	@Override
+	public Integer remove() {
+		return removeFirst();
+	}
+
+} // end class FIFO
