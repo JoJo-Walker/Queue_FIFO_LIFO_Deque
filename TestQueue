@@ -1,0 +1,137 @@
+public class TestQueue {
+
+	static class QueueTester extends Queue {
+		public QueueTester(int size) {
+			super(size);
+		}
+		public void add(Integer n) {}
+		public Integer remove() { return null; }
+		public Integer peek() { return null; }
+	}
+
+	public static void test() {
+		System.out.println("\n*************    TestQueue.test     ***************");
+		// Testing Queue operations specific to location.
+		testAddFirst();
+		testAddLast();
+		testPeekFirstLast();
+		testRemoveFirst();
+		testRemoveLast();
+		testRemoveAll();
+		testAddUpToLimit();
+		testAddOverLimit();
+
+		System.out.println();
+	} // end test()
+
+	public static void testAddFirst() {
+		System.out.println("\n--- testAddFirst() ---");
+		QueueTester queue = new QueueTester(5);
+		queue.addFirst(0);
+		queue.addFirst(1);
+		if (2 != queue.numberOfItems()) {
+			System.out.println("AddFirst. NOI "+queue.numberOfItems()+". Expected 2");
+		}
+	}
+
+	public static void testAddLast() {
+		System.out.println("\n--- testAddLast() ---");
+		QueueTester queue = new QueueTester(5);
+		queue.addLast(0);
+		queue.addLast(1);
+		if (2 != queue.numberOfItems()) {
+			System.out.println("AddLast. NOI "+queue.numberOfItems()+". Expected 2");
+		}
+	}
+
+	public static void testPeekFirstLast() {
+		System.out.println("\n--- testPeekFirstLast() ---");
+		QueueTester queue = new QueueTester(5);
+		queue.addFirst(0);
+		queue.addFirst(1);
+		queue.addFirst(2);
+		if (queue.peekFirst()==null || 2 != queue.peekFirst()) {
+			System.out.println("PeekFirst is "+queue.peek()+". Expected 2.");
+		}
+		if (queue.peekLast()==null || queue.peekLast() != 0) {
+			System.out.println("PeekLast is "+queue.peek()+". Expected 0.");
+		}
+	} // end testPeekFirstLast
+
+	public static void testAddUpToLimit() {
+		System.out.println("\n--- testAddUpToLimit() ---");
+		QueueTester queue = new QueueTester(5);
+		for (int i=0; i<5; i++) {
+			queue.addFirst(i);
+		}
+		if (!queue.isFull()) {
+			System.out.println("Added to capacity, but not full.");
+		}
+		if (5 != queue.numberOfItems()) {
+			System.out.println("Add To Limit. NOI "+queue.numberOfItems()+". Expected 5");
+		}
+	} // end testAddUpToLimit
+
+	public static void testAddOverLimit() {
+		System.out.println("\n--- testAddOverLimit() ---");
+		QueueTester queue = new QueueTester(5);
+		for (int i=0; i<6; i++) {
+			queue.addFirst(i);
+		}
+		if (queue.numberOfItems() != 5) {
+			System.out.println("Added over capacity. NOI "+queue.numberOfItems()+". Expected 5");
+		}
+	} // end testAddOverLimit
+
+	public static void testRemoveLast() {
+		System.out.println("\n --- testRemoveLast() --- ");
+		QueueTester queue = new QueueTester(5);
+		for (int i=0; i<5; i++) {
+			queue.addFirst(i);
+		}
+		Integer result = -1;
+		for (int i=0; i<4; i++) {
+			result = queue.removeLast();
+			if (result == null || result != i) {
+				System.out.println("RemoveLast "+result+". Expected "+i);
+			}
+		}
+		if (queue.numberOfItems() != 1) {
+			System.out.println("RemoveLast all but 1. NOI "+queue.numberOfItems()+". Expected 1");
+		}
+	} // end testRemove
+
+	public static void testRemoveFirst() {
+		System.out.println("\n --- testRemoveFirst() --- ");
+		QueueTester queue = new QueueTester(5);
+		for (int i=0; i<5; i++) {
+			queue.addLast(i);
+		}
+	 	Integer result = -1;
+		for (int i=0; i<4; i++) {
+			result = queue.removeFirst();
+			if (result == null || result != i) {
+				System.out.println("RemoveFirst "+result+". Expected "+i);
+			}
+		}
+		if (queue.numberOfItems() != 1) {
+			System.out.println("RemoveFirst all but 1. NOI "+queue.numberOfItems()+". Expected 1");
+		}
+	} // end testRemove
+
+	public static void testRemoveAll() {
+		System.out.println("\n --- testRemoveAll() --- ");
+		QueueTester queue = new QueueTester(5);
+		for (int i=0; i<3; i++) {
+			queue.addFirst(i);
+		}
+		queue.removeAll();
+		if (!queue.isEmpty()) {
+			System.out.println("Not isEmpty() after removeAll.");
+		}
+		if (0 != queue.numberOfItems()) {
+			System.out.println("Remove all. NOI "+queue.numberOfItems()+". Expected 0");
+		}
+	} // end testRemoveAll
+
+} // end class TestQueue
