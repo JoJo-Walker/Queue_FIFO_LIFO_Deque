@@ -1,0 +1,347 @@
+
+import java.util.Comparator;
+
+/**
+ * Binary Search Tree storing type T Binary Search Tree storing type T
+ *
+ * @param <T>
+ */
+public class Tree<T extends Comparable> {
+
+    class Node {
+
+        T data = null;
+        int height = -1;
+        Node right = null;
+        Node left = null;
+
+        Node(T val) {
+            data = val;
+        }
+    } // end class Node
+
+    /**
+     * Root of binary search tree Root of binary search tree
+     */
+    private Node root = null;
+
+    /**
+     * Number of nodes in the tree Number of nodes in the tree
+     */
+    private int numberOfNodes = 0;
+
+    /**
+     * Indicate status of height values. Set true when height calculated.
+     * Indicate status of height values. Set true when height calculated.
+     */
+    private boolean heightValid = false;
+
+    /**
+     * returns the number of elements within the tree
+     *
+     * @return int the number of elements
+     */
+    public int length() {
+        return numberOfNodes;
+    }
+
+    /**
+     * Clears the tree just in case needed to be empty.
+     *
+     */
+    public void clear() {
+        numberOfNodes = 0;
+        root = null;
+    }
+
+    /**
+     * Returns this nodes data
+     *
+     * @return T generic value
+     */
+    public T data() {
+        return this.data();
+    }
+
+    /**
+     * The order used to build the tree The order used to build the tree
+     */
+    private Comparator<T> sortOrder = new Comparator<T>() {
+        @Override
+        public int compare(T obj1, T obj2) {
+            return obj1.compareTo(obj2);
+        }
+    };
+
+    /**
+     * Add a node to the tree Add a node to the tree
+     *
+     * @param value : value to be stored in tree
+     */
+    public void add(T object) {
+        ++numberOfNodes;
+        Node newNode = new Node(object);
+        if (root == null) {
+            root = newNode;
+            return;
+        }
+        Node currNode = root;
+        while (currNode != null) {
+            if (sortOrder.compare(object, currNode.data) < 0) {
+                if (currNode.left == null) {
+                    currNode.left = newNode;
+                    heightValid = false;
+                    return;
+                }
+                currNode = currNode.left;
+            } else {
+                if (currNode.right == null) {
+                    currNode.right = newNode;
+                    heightValid = false;
+                    return;
+                }
+                currNode = currNode.right;
+            }
+        }
+        heightValid = false;
+    }
+
+    /**
+     * Searches for an element within the tree
+     *
+     * @param object the object to search for
+     * @return true or false
+     */
+    public boolean find(T object) {
+        // recursive or iterative search through the tree, searching for object
+        Node currNode = root;
+        while (currNode != null) {
+            if (currNode.data.equals(object)) {
+                return true;
+            } else if (sortOrder.compare(object, currNode.data) < 0) {
+                currNode = currNode.left;
+            } else {
+                currNode = currNode.right;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Recursive element of toArray()
+     *
+     * @param node the node currently recursive on
+     * @param i the current index of the node
+     * @param array the array to add elements too
+     */
+    public void traversal(Node node, int i, T[] array) {
+        if (node != null) {
+            array[i] = node.data;
+            traversal(node.left, 2 * i + 1, array);
+            traversal(node.right, 2 * i + 2, array);
+        }
+    }
+
+    /**
+     * Transfers elements of the tree into an array
+     *
+     * @return the array of the tree elements
+     */
+    public T[] toArray() {
+        if (root == null) {
+//            System.out.println("Error in ToArray()");
+            return null;
+        }
+        @SuppressWarnings("unchecked")
+        T[] temp = (T[]) new Comparable[1000];
+        @SuppressWarnings("unchecked")
+        T[] newArray = (T[]) new Comparable[numberOfNodes];
+        int i = 0;
+        traversal(root, i, temp);
+        int count = 0;
+        for (i = 0; i < temp.length; i++) {
+            if (temp[i] != null) {
+                newArray[count] = temp[i];
+                count++;
+            }
+        }
+        sort(newArray);
+        return newArray;
+    }
+
+    /**
+     * Selective sort in order to create a sorted array for toArray()
+     *
+     * @param listToSort the array to sort
+     */
+    public void sort(T[] listToSort) {
+        for (int i = 0; i < listToSort.length - 1; ++i) {
+
+            // Find index of smallest remaining element
+            int indexSmallest = i;
+            for (int j = i + 1; j < listToSort.length; ++j) {
+
+                if (this.sortOrder.compare(listToSort[j], listToSort[indexSmallest]) < 0) {
+                    indexSmallest = j;
+                }
+            }
+
+            // Swap numbers[i] and numbers[indexSmallest]
+            T temp = listToSort[i];
+            listToSort[i] = listToSort[indexSmallest];
+            listToSort[indexSmallest] = temp;
+        }
+    }
+
+    /**
+     * Calculates the height of each of the Nodes in the tree
+     *
+     */
+    public void calculateHeight() {
+        // determine the height of every node in the tree. use recursion.
+        // recurse to the bottom, set height to 0, then add as you go back up
+        depth(root);
+        
+        heightValid = true;
+    }
+
+    /**
+     * Recursive element of calculate height
+     *
+     * @param n the node to look at
+     * @return An integer value
+     */
+    public int depth(Node n) {
+        if (n == null) {
+            return -1;
+        }
+        int left = depth(n.left);
+        int right = depth(n.right);
+
+        if (left > right) {
+            n.height = left + 1;
+            return (n.height);
+        } else {
+            n.height = right + 1;
+            return (n.height);
+
+        }
+
+    }
+
+    /**
+     * Balances the tree
+     *
+     */
+    public void balance() {
+        // reorganize tree to ensure it is in balance.
+        // use recursion -- looks a lot like binary search
+        // When complete, the height of the tree should be O(lg n)
+        // Process: convert to an array, then rebuild the tree
+        T[] temp = toArray();
+        int low = 0;
+        int high = numberOfNodes -1;
+        root = recurseBalance(temp, low, high);
+    }
+
+    /**
+     * Recursive element of balancing
+     *
+     * @param array the array in order to help the balance
+     * @param key Parent node to look at
+     */
+    public Node recurseBalance(T[] array, int low, int high) {
+        if (low > high) {
+            return null;
+        }
+        int mid = (low + high) / 2;
+        Node temp = new Node(array[mid]);
+        temp.left = recurseBalance(array, low, mid -1);
+        temp.right = recurseBalance(array, mid + 1, high);
+        return temp;
+    }
+
+    /**
+     * Takes in a comparator and re organizes the tree
+     *
+     * @param comp the comparator to look at
+     */
+    public void reorder(Comparator<T> comp) {
+        sortOrder = comp;
+        T[] temp = toArray();
+        clear();
+        for (int i = 0; i < temp.length; i++) {
+            add(temp[i]);
+        }
+    }
+
+    /**
+     * Creates a visual representation of a Binary Search Tree
+     *
+     */
+    public void visualize() {
+        System.out.println("\n\n---- BST -----\n");
+        // copied from web -- citation provided later
+        final int width = 128;
+        int height = 6;  // max height
+        if (heightValid) {
+            height = root.height;
+        }
+        height = 7;
+        int len = width * height * 2 + 2;
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 1; i <= len; i++) {
+            sb.append(i < len - 2 && i % width == 0 ? "\n" : ' ');
+        }
+        visualizeRec(sb, width / 2, 1, width / 4, width, root, " ");
+        System.out.println(sb);
+    } // end visualize
+
+    /**
+     * Recursive aspect of the Visualization
+     *
+     * @param sb String builder
+     * @param c integer
+     * @param r integer
+     * @param d integer
+     * @param w integer
+     * @param n Node
+     * @param edge String
+     */
+    private void visualizeRec(StringBuilder sb, int c, int r, int d, int w, Node n, String edge) {
+        if (n == null) {
+            return;
+        }
+        visualizeRec(sb, c - d, r + 2, d / 2, w, n.left, " /");
+        String s = n.data + ":" + n.height;
+        int idx1 = r * w + c - (s.length() + 1) / 2;
+        int idx2 = idx1 + s.length();
+        int idx3 = idx1 - w;
+        if (idx2 < sb.length()) {
+            sb.replace(idx1, idx2, s).replace(idx3, idx3 + 2, edge);
+        }
+        visualizeRec(sb, c + d, r + 2, d / 2, w, n.right, "\\ ");
+    } // end visualizeRec
+
+    /**
+     * Print elements of tree in order through recursion Print elements of tree
+     * in order through recursion
+     */
+    public void print() {
+        printRecursive(root);
+    }
+
+    /**
+     * Recursive print elements of tree in order Recursive print elements of
+     * tree in order
+     */
+    public void printRecursive(Node node) {
+        if (node == null) {
+            return;
+        }
+        printRecursive(node.left);
+        System.out.print(node.data + ":" + node.height + " ");
+        printRecursive(node.right);
+    }
+
+} // end class Tree
