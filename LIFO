@@ -1,0 +1,63 @@
+
+public class LIFO extends Queue {
+
+	public LIFO(int size) {
+		super(size);
+	}
+
+	// Super class Abstract Methods.
+        /** Peek at the element at the back of the list (to be removed next)
+	@return the element at the head.
+	*/
+	@Override 
+        public Integer peek() { 
+            return peekLast(); 
+        }
+        
+        /** Add element to tail of queue, UNLESS it is full.
+	@param n the element to add to the queue
+	*/
+	@Override 
+        public void add(Integer n) {
+            addLast(n);
+        }
+        
+        /** Remove element from tail of queue.
+	@return element removed or null if queue is empty.
+	*/
+	@Override 
+        public Integer remove() { 
+            return removeLast(); 
+        }
+
+        /** Print in order from tail to head.
+	@return all numbers on one line.
+	*/
+	@Override
+	public String toString() {
+		if (isEmpty()) { return ""; }
+		String returnString = "[ ";
+		for (int i=numberOfItems(); i>0; i--) {
+			Integer n = nums[(tail()+i)%(capacity())];
+			returnString = returnString + n + " ";
+		}
+		returnString = returnString + "]";
+		return returnString;
+	}
+        
+	// LIFO methods
+        /** Add element to tail of queue, UNLESS it is full.
+	@param n the element to add to the queue
+	*/
+	public void push(Integer n) {
+            addLast(n);
+        }
+        
+        /** Remove element from tail of queue.
+	@return element removed or null if queue is empty.
+	*/
+	public Integer pop() { 
+            return removeLast(); 
+        }
+
+} // end class LIFO
