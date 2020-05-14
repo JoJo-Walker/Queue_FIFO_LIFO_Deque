@@ -1,0 +1,37 @@
+public class Main {
+
+	public static void main(String[] args) {
+		TestQueue.test();
+		TestFIFO.test();
+		TestLIFO.test();
+		TestDeque.test();
+
+		System.out.println("\n **** VISUAL INSPECTION of toString()");
+
+		FIFO fifo = new FIFO(5);
+		for (int i=0; i<5; i++) {
+			fifo.add(i);
+		}
+		System.out.print("FIFO prints from 0 to 4:  ");
+		System.out.println(fifo);
+
+		LIFO lifo = new LIFO(5);
+		for (int i=0; i<5; i++) {
+			lifo.add(i);
+		}
+		System.out.print("LIFO prints from 4 to 0:   ");
+		System.out.println(lifo);
+
+
+		Deque deque = new Deque(5);
+		for (int i=0; i<5; i++) {
+			deque.add(i);
+		}
+		System.out.print("Deque prints from 0 to 4:   ");
+		System.out.println(deque);
+
+		System.out.println();
+
+	} // end main()
+
+} // end class Main
